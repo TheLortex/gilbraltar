@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TARGET="${TARGET:-aarch64-rpi4-none-static}"
+TARGET="${TARGET:-aarch64-linux-gnu}"
 
 prog_NAME="$(basename $0)"
 
@@ -69,34 +69,11 @@ done
 ocamlfind query ocaml-src >/dev/null || exit 1
 
 MAKECONF_CFLAGS=""
-MAKECONF_CC="$CONFIG_TARGET-cc"
+MAKECONF_CC="$CONFIG_TARGET-gcc"
 MAKECONF_LD="$CONFIG_TARGET-ld"
 MAKECONF_AS="$MAKECONF_CC -c"
 
-BUILD_TRIPLET="$($MAKECONF_CC -dumpmachine)"
 OCAML_BUILD_ARCH=
-
-# Canonicalize BUILD_ARCH and set OCAML_BUILD_ARCH. The former is for autoconf,
-# the latter for the rest of the OCaml build system.
-case "${BUILD_TRIPLET}" in
-    amd64-*|x86_64-*)
-        BUILD_ARCH="x86_64"
-        OCAML_BUILD_ARCH="amd64"
-        ;;
-    aarch64-*)
-        BUILD_ARCH="aarch64"
-        OCAML_BUILD_ARCH="arm64"
-        ;;
-    *)
-        echo "ERROR: Unsupported architecture: ${BUILD_TRIPLET}" 1>&2
-        exit 1
-        ;;
-esac
-
-EXTRA_LIBS=
-if [ "${BUILD_ARCH}" = "aarch64" ]; then
-    EXTRA_LIBS="$EXTRA_LIBS -lgcc" || exit 1
-fi
 
 cat <<EOM >Makeconf
 MAKECONF_PREFIX=${MAKECONF_PREFIX}
@@ -105,9 +82,7 @@ MAKECONF_TOOLCHAIN=${CONFIG_TARGET}
 MAKECONF_CC=${MAKECONF_CC}
 MAKECONF_LD=${MAKECONF_LD}
 MAKECONF_AS=${MAKECONF_AS}
-MAKECONF_BUILD_ARCH=${BUILD_ARCH}
-MAKECONF_OCAML_BUILD_ARCH=${OCAML_BUILD_ARCH}
+MAKECONF_BUILD_ARCH=aarch64
+MAKECONF_OCAML_BUILD_ARCH=arm64
 MAKECONF_OCAML_CONFIGURE_OPTIONS=${OCAML_CONFIGURE_OPTIONS}
-MAKECONF_NOLIBC_SYSDEP_OBJS=rpi4.o
-MAKECONF_EXTRA_LIBS=${EXTRA_LIBS}
 EOM

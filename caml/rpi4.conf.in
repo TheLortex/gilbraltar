@@ -1,8 +1,0 @@
-path(rpi4) = "@@PREFIX@@/rpi4-sysroot/lib"
-destdir(rpi4) = "@@PREFIX@@/rpi4-sysroot/lib"
-stdlib(rpi4) = "@@PREFIX@@/rpi4-sysroot/lib/ocaml"
-ocamlopt(rpi4) = "@@PREFIX@@/rpi4-sysroot/bin/ocamlopt"
-ocamlc(rpi4) = "@@PREFIX@@/rpi4-sysroot/bin/ocamlc"
-ocamlmklib(rpi4) = "@@PREFIX@@/rpi4-sysroot/bin/ocamlmklib"
-ocamldep(rpi4) = "@@PREFIX@@/rpi4-sysroot/bin/ocamldep"
-ocamlcp(rpi4) = "@@PREFIX@@/rpi4-sysroot/bin/ocamlcp"
