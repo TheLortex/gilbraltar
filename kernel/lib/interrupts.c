@@ -18,7 +18,6 @@ void register_interrupt_handler(void (* v_interrupt_handler)()) {
 }
 
 void interrupt_handle_el1_irq() {
-    log(INFO, "IRQ\n");
     uart_drain_output_queue();
     if(interrupt_handler != NULL){
         (*interrupt_handler)();
